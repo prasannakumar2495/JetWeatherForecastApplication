@@ -1,10 +1,21 @@
 package com.pk.jetweatherforecastapplication.widgets
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.absolutePadding
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.AccountBox
+import androidx.compose.material.icons.rounded.Favorite
 import androidx.compose.material.icons.rounded.MoreVert
 import androidx.compose.material.icons.rounded.Search
+import androidx.compose.material.icons.rounded.Settings
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -13,6 +24,10 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -22,6 +37,9 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.pk.jetweatherforecastapplication.util.Constants.ABOUT
+import com.pk.jetweatherforecastapplication.util.Constants.FAVOURITES
+import com.pk.jetweatherforecastapplication.util.Constants.SETTINGS
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -38,6 +56,12 @@ fun WeatherAppBar(
 	Surface(
 		shadowElevation = elevation
 	) {
+		val showDialogState = remember {
+			mutableStateOf(false)
+		}
+		if (showDialogState.value) {
+			ShowDialogue(showDialogState, navController)
+		}
 		TopAppBar(colors = TopAppBarDefaults.smallTopAppBarColors(containerColor = Color.Transparent),
 			title = {
 				Text(
@@ -51,7 +75,9 @@ fun WeatherAppBar(
 					IconButton(onClick = { onAddActionClicked.invoke() }) {
 						Icon(imageVector = Icons.Rounded.Search, contentDescription = "Search Icon")
 					}
-					IconButton(onClick = { /*TODO*/ }) {
+					IconButton(onClick = {
+						showDialogState.value = !showDialogState.value
+					}) {
 						Icon(
 							imageVector = Icons.Rounded.MoreVert, contentDescription = "More Option"
 						)
@@ -68,5 +94,47 @@ fun WeatherAppBar(
 							})
 					}
 			})
+	}
+}
+
+@Composable
+fun ShowDialogue(showDialogState: MutableState<Boolean>, navController: NavController) {
+	Column(
+		modifier = Modifier
+			.fillMaxWidth()
+			.wrapContentSize(Alignment.TopEnd)
+			.absolutePadding(top = 45.dp, right = 20.dp)
+	) {
+		val itemsList = listOf(ABOUT, FAVOURITES, SETTINGS)
+		DropdownMenu(
+			expanded = showDialogState.value,
+			onDismissRequest = { showDialogState.value = !showDialogState.value },
+			modifier = Modifier
+				.width(140.dp)
+				.background(Color.White)
+		) {
+			itemsList.forEachIndexed { _, text ->
+				DropdownMenuItem(text = { Text(text = text) }, onClick = {
+					showDialogState.value = !showDialogState.value
+				}, leadingIcon = {
+					when (text) {
+						ABOUT -> Icon(
+							imageVector = Icons.Rounded.AccountBox,
+							contentDescription = null
+						)
+						
+						FAVOURITES -> Icon(
+							imageVector = Icons.Rounded.Favorite,
+							contentDescription = null
+						)
+						
+						SETTINGS -> Icon(
+							imageVector = Icons.Rounded.Settings,
+							contentDescription = null
+						)
+					}
+				})
+			}
+		}
 	}
 }

@@ -8,4 +8,7 @@ object Constants {
 	const val METRIC = "metric"
 	const val EMPTY = ""
 	const val DEFAULT_LOCATION = "Rajahmundry"
+	const val ABOUT = "About"
+	const val FAVOURITES = "Favourites"
+	const val SETTINGS = "Settings"
 }
