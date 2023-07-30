@@ -1,5 +1,6 @@
 package com.pk.jetweatherforecastapplication.widgets
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -37,6 +38,8 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.pk.jetweatherforecastapplication.MainActivity.Companion.TAG
+import com.pk.jetweatherforecastapplication.navigation.WeatherScreens
 import com.pk.jetweatherforecastapplication.util.Constants.ABOUT
 import com.pk.jetweatherforecastapplication.util.Constants.FAVOURITES
 import com.pk.jetweatherforecastapplication.util.Constants.SETTINGS
@@ -105,7 +108,10 @@ fun ShowDialogue(showDialogState: MutableState<Boolean>, navController: NavContr
 			.wrapContentSize(Alignment.TopEnd)
 			.absolutePadding(top = 45.dp, right = 20.dp)
 	) {
-		val itemsList = listOf(ABOUT, FAVOURITES, SETTINGS)
+		val itemsList = HashMap<ImageVector, String>()
+		itemsList[Icons.Rounded.AccountBox] = ABOUT
+		itemsList[Icons.Rounded.Favorite] = FAVOURITES
+		itemsList[Icons.Rounded.Settings] = SETTINGS
 		DropdownMenu(
 			expanded = showDialogState.value,
 			onDismissRequest = { showDialogState.value = !showDialogState.value },
@@ -113,26 +119,23 @@ fun ShowDialogue(showDialogState: MutableState<Boolean>, navController: NavContr
 				.width(140.dp)
 				.background(Color.White)
 		) {
-			itemsList.forEachIndexed { _, text ->
-				DropdownMenuItem(text = { Text(text = text) }, onClick = {
+			itemsList.forEach { hashMap ->
+				Log.d(TAG, "ShowDialogue: $hashMap")
+				DropdownMenuItem(text = { Text(text = hashMap.value) }, leadingIcon = {
+					Icon(
+						imageVector = hashMap.key,
+						contentDescription = null
+					)
+				}, onClick = {
 					showDialogState.value = !showDialogState.value
-				}, leadingIcon = {
-					when (text) {
-						ABOUT -> Icon(
-							imageVector = Icons.Rounded.AccountBox,
-							contentDescription = null
-						)
-						
-						FAVOURITES -> Icon(
-							imageVector = Icons.Rounded.Favorite,
-							contentDescription = null
-						)
-						
-						SETTINGS -> Icon(
-							imageVector = Icons.Rounded.Settings,
-							contentDescription = null
-						)
-					}
+					navController.navigate(
+						when (hashMap.value) {
+							ABOUT -> WeatherScreens.AboutScreen.name
+							FAVOURITES -> WeatherScreens.FavouritesScreen.name
+							SETTINGS -> WeatherScreens.SettingsScreen.name
+							else -> WeatherScreens.MainScreen.name
+						}
+					)
 				})
 			}
 		}

@@ -7,9 +7,12 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.pk.jetweatherforecastapplication.screens.about.AboutScreen
+import com.pk.jetweatherforecastapplication.screens.favourites.FavouritesScreen
 import com.pk.jetweatherforecastapplication.screens.main.MainScreen
 import com.pk.jetweatherforecastapplication.screens.main.MainScreenViewModel
 import com.pk.jetweatherforecastapplication.screens.search.SearchScreen
+import com.pk.jetweatherforecastapplication.screens.settings.SettingsScreen
 import com.pk.jetweatherforecastapplication.screens.splash.WeatherSplashScreen
 
 @Composable
@@ -33,6 +36,18 @@ fun WeatherNavigation() {
 		composable(route = WeatherScreens.SearchScreen.name) {
 			val mainScreenViewModel = hiltViewModel<MainScreenViewModel>()
 			SearchScreen(navController = navController, mainScreenViewModel)
+		}
+		composable(route = WeatherScreens.AboutScreen.name) {
+			val mainScreenViewModel = hiltViewModel<MainScreenViewModel>()
+			AboutScreen(navController = navController, mainScreenViewModel)
+		}
+		composable(route = WeatherScreens.FavouritesScreen.name) {
+			val mainScreenViewModel = hiltViewModel<MainScreenViewModel>()
+			FavouritesScreen(navController = navController, mainScreenViewModel)
+		}
+		composable(route = WeatherScreens.SettingsScreen.name) {
+			val mainScreenViewModel = hiltViewModel<MainScreenViewModel>()
+			SettingsScreen(navController = navController, mainScreenViewModel)
 		}
 	}
 }
