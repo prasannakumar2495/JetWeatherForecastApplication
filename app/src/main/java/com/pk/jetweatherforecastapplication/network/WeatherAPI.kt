@@ -14,5 +14,5 @@ interface WeatherAPI {
 		@Query("q") query: String,
 		@Query("units") units: String = METRIC,
 		@Query("appid") apiKey: String = BuildConfig.WEATHER_API_KEY,
-	): Weather
+	): Weather?
 }
