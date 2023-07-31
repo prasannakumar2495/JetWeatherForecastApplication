@@ -10,10 +10,16 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.android.Android
+import io.ktor.client.features.HttpTimeout
+import io.ktor.client.features.defaultRequest
 import io.ktor.client.features.json.JsonFeature
 import io.ktor.client.features.json.serializer.KotlinxSerializer
 import io.ktor.client.features.logging.LogLevel
 import io.ktor.client.features.logging.Logging
+import io.ktor.client.request.accept
+import io.ktor.http.ContentType
+import io.ktor.http.HttpMethod
+import io.ktor.http.contentType
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
@@ -30,13 +36,27 @@ class AppModule {
 	@Provides
 	@Singleton
 	fun createKtorClient(): GetServiceKtor {
+		val json = kotlinx.serialization.json.Json {
+			ignoreUnknownKeys = true
+			isLenient = true
+			encodeDefaults = false
+		}
 		return GetServiceKtorImpl(
 			client = HttpClient(Android) {
 				install(Logging) {
 					level = LogLevel.ALL
 				}
 				install(JsonFeature) {
-					serializer = KotlinxSerializer()
+					serializer = KotlinxSerializer(json)
+				}
+				install(HttpTimeout) {
+					requestTimeoutMillis = 15000L
+					connectTimeoutMillis = 15000L
+					socketTimeoutMillis = 15000L
+				}
+				defaultRequest {
+					if (method != HttpMethod.Get) contentType(ContentType.Application.Json)
+					accept(ContentType.Application.Json)
 				}
 			}
 		)

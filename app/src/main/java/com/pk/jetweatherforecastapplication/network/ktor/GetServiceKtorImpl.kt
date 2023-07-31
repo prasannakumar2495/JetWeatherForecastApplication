@@ -18,10 +18,11 @@ class GetServiceKtorImpl(
 	override suspend fun getWeatherKtor(query: String, units: String, apiKey: String): Weather? {
 		return try {
 			client.get {
-				url(BASE_URL_KTOR)
-				parameter("q", query)
-				parameter("appid", apiKey)
-				parameter("units", units)
+				url(BASE_URL_KTOR) {
+					parameters.append("q", query)
+					parameters.append("appid", apiKey)
+					parameters.append("units", units)
+				}
 			}
 		}
 		/**
