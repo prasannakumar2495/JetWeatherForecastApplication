@@ -11,18 +11,16 @@ import io.ktor.client.features.ServerResponseException
 import io.ktor.client.request.get
 import io.ktor.client.request.parameter
 import io.ktor.client.request.url
+import javax.inject.Inject
 
-class GetServiceKtorImpl(
-	private val client: HttpClient,
-) : GetServiceKtor {
+class GetServiceKtorImpl @Inject constructor(private val client: HttpClient) : GetServiceKtor {
 	override suspend fun getWeatherKtor(query: String, units: String, apiKey: String): Weather? {
 		return try {
 			client.get {
-				url(BASE_URL_KTOR) {
-					parameters.append("q", query)
-					parameters.append("appid", apiKey)
-					parameters.append("units", units)
-				}
+				url(BASE_URL_KTOR)
+				parameter("q", query)
+				parameter("appid", apiKey)
+				parameter("units", units)
 			}
 		}
 		/**
@@ -31,15 +29,15 @@ class GetServiceKtorImpl(
 		 */
 		catch (e: RedirectResponseException) {
 			//3xx - response
-			Log.d(TAG, "getWeather: ${e.response.status.description}")
+			Log.d(TAG, "getWeatherRedirectResponseException: ${e.response.status.description}")
 			null
 		} catch (e: ClientRequestException) {
 			//4xx - response
-			Log.d(TAG, "getWeather: ${e.response.status.description}")
+			Log.d(TAG, "getWeatherClientRequestException: ${e.response.status.description}")
 			null
 		} catch (e: ServerResponseException) {
 			//5xx - response
-			Log.d(TAG, "getWeather: ${e.response.status.description}")
+			Log.d(TAG, "getWeatherServerResponseException: ${e.response.status.description}")
 			null
 		} catch (e: Exception) {
 			Log.d(TAG, "getWeather: ${e.message}")

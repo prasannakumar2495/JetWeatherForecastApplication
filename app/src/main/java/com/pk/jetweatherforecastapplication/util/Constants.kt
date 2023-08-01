@@ -12,4 +12,5 @@ object Constants {
 	const val ABOUT = "About"
 	const val FAVOURITES = "Favourites"
 	const val SETTINGS = "Settings"
+	const val HTTP_RESPONSE = "Http Response"
 }
