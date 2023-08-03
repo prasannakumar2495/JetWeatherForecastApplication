@@ -8,11 +8,12 @@ import androidx.room.Query
 import androidx.room.Update
 import com.pk.jetweatherforecastapplication.model.Favourite
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.StateFlow
 
 @Dao
 interface WeatherDao {
 	@Query("select * from favourite")
-	suspend fun getFavourites(): Flow<List<Favourite>>
+	suspend fun getFavourites(): List<Favourite>
 	
 	@Query("select * from favourite where city=:city")
 	suspend fun getFavouriteByCity(city: String): Favourite
