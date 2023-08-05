@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.AccountBox
 import androidx.compose.material.icons.rounded.Favorite
+import androidx.compose.material.icons.rounded.FavoriteBorder
 import androidx.compose.material.icons.rounded.MoreVert
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material.icons.rounded.Settings
@@ -37,12 +38,18 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.pk.jetweatherforecastapplication.MainActivity.Companion.TAG
+import com.pk.jetweatherforecastapplication.model.Favourite
 import com.pk.jetweatherforecastapplication.navigation.WeatherScreens
+import com.pk.jetweatherforecastapplication.screens.favourites.FavouritesViewModel
 import com.pk.jetweatherforecastapplication.util.Constants.ABOUT
 import com.pk.jetweatherforecastapplication.util.Constants.FAVOURITES
 import com.pk.jetweatherforecastapplication.util.Constants.SETTINGS
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -55,6 +62,7 @@ fun WeatherAppBar(
 	onAddActionClicked: () -> Unit = {},
 	onButtonClicked: () -> Unit = {},
 	displayBackNavigationIcon: Boolean = false,
+	favouritesViewModel: FavouritesViewModel = hiltViewModel(),
 ) {
 	Surface(
 		shadowElevation = elevation
@@ -96,6 +104,24 @@ fun WeatherAppBar(
 								onButtonClicked.invoke()
 							})
 					}
+				if (isMainScreen)
+					Icon(
+						imageVector = Icons.Rounded.FavoriteBorder,
+						contentDescription = "Favourite Button",
+						modifier = Modifier.clickable {
+							CoroutineScope(Dispatchers.Default).launch {
+								favouritesViewModel.insertFavourite(
+									Favourite(
+										city = title.split(",")[0].trim(),
+										country = title.split(",")[1].trim()
+									)
+								).apply {
+									if (isCompleted)
+										Log.d(TAG, "WeatherAppBar: $isCompleted")
+								}
+							}
+						}, tint = Color.Red.copy(alpha = 0.7f)
+					)
 			})
 	}
 }

@@ -32,13 +32,16 @@ class FavouritesViewModel @Inject constructor(private val weatherRepo: WeatherRe
 	
 	suspend fun insertFavourite(favourite: Favourite) = viewModelScope.launch {
 		weatherRepo.insertFavourite(favourite = favourite)
+		Log.d(TAG, "insertFavourite: $favourite")
 	}
 	
 	suspend fun deleteSingleFavourite(favourite: Favourite) = viewModelScope.launch {
 		weatherRepo.deleteSingleFavourite(favourite = favourite)
+		Log.d(TAG, "deleteSingleFavourite: $favourite")
 	}
 	
 	suspend fun updateFavourite(favourite: Favourite) = viewModelScope.launch {
 		weatherRepo.updateFavourite(favourite = favourite)
+		Log.d(TAG, "updateFavourite: $favourite")
 	}
 }
