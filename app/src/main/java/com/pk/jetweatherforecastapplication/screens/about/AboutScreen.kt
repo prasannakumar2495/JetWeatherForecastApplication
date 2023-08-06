@@ -17,6 +17,7 @@ import androidx.navigation.NavController
 import com.pk.jetweatherforecastapplication.R
 import com.pk.jetweatherforecastapplication.screens.main.MainScreenViewModel
 import com.pk.jetweatherforecastapplication.util.Constants.ABOUT
+import com.pk.jetweatherforecastapplication.util.Constants.BACK_ICON
 import com.pk.jetweatherforecastapplication.widgets.WeatherAppBar
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -25,7 +26,7 @@ fun AboutScreen(navController: NavController, mainScreenViewModel: MainScreenVie
 	Scaffold(topBar = {
 		WeatherAppBar(
 			navController = navController, title = ABOUT,
-			icon = Icons.Rounded.ArrowBack, isMainScreen = false,
+			icon = BACK_ICON, isMainScreen = false,
 			onButtonClicked = {
 				navController.popBackStack()
 			}, displayBackNavigationIcon = true

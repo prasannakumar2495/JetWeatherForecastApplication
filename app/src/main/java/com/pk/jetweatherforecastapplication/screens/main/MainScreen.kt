@@ -34,6 +34,7 @@ import com.pk.jetweatherforecastapplication.data.DataOrException
 import com.pk.jetweatherforecastapplication.model.Weather
 import com.pk.jetweatherforecastapplication.navigation.WeatherScreens
 import com.pk.jetweatherforecastapplication.ui.theme.customColor
+import com.pk.jetweatherforecastapplication.util.Constants.BACK_ICON
 import com.pk.jetweatherforecastapplication.util.Constants.DEFAULT_LOCATION
 import com.pk.jetweatherforecastapplication.util.formatDate
 import com.pk.jetweatherforecastapplication.widgets.WeatherAppBar
@@ -73,7 +74,7 @@ fun MainScaffold(
 		WeatherAppBar(
 			title = weatherDataState.city.name + ", ${weatherDataState.city.country}",
 			navController = navController,
-			elevation = 5.dp, icon = Icons.Rounded.ArrowBack,
+			elevation = 5.dp, icon = BACK_ICON,
 			onAddActionClicked = { navController.navigate(WeatherScreens.SearchScreen.name) }
 		)
 	}, content = {

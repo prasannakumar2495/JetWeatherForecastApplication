@@ -46,6 +46,7 @@ import com.pk.jetweatherforecastapplication.navigation.WeatherScreens
 import com.pk.jetweatherforecastapplication.screens.favourites.FavouritesViewModel
 import com.pk.jetweatherforecastapplication.util.Constants.ABOUT
 import com.pk.jetweatherforecastapplication.util.Constants.FAVOURITES
+import com.pk.jetweatherforecastapplication.util.Constants.FAVOURITE_ICON
 import com.pk.jetweatherforecastapplication.util.Constants.SETTINGS
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -106,7 +107,7 @@ fun WeatherAppBar(
 					}
 				if (isMainScreen)
 					Icon(
-						imageVector = Icons.Rounded.FavoriteBorder,
+						imageVector = FAVOURITE_ICON,
 						contentDescription = "Favourite Button",
 						modifier = Modifier.clickable {
 							CoroutineScope(Dispatchers.Default).launch {

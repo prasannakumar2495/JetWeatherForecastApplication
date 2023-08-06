@@ -36,6 +36,7 @@ import androidx.navigation.NavController
 import com.pk.jetweatherforecastapplication.MainActivity.Companion.TAG
 import com.pk.jetweatherforecastapplication.navigation.WeatherScreens
 import com.pk.jetweatherforecastapplication.screens.main.MainScreenViewModel
+import com.pk.jetweatherforecastapplication.util.Constants.BACK_ICON
 import com.pk.jetweatherforecastapplication.util.Constants.EMPTY
 import com.pk.jetweatherforecastapplication.widgets.WeatherAppBar
 
@@ -47,7 +48,7 @@ fun SearchScreen(
 	Scaffold(topBar = {
 		WeatherAppBar(
 			title = "Search Here", navController = navController, isMainScreen = false,
-			icon = Icons.Rounded.ArrowBack, displayBackNavigationIcon = true, onButtonClicked = {
+			icon = BACK_ICON, displayBackNavigationIcon = true, onButtonClicked = {
 				navController.popBackStack()
 				Log.d(TAG, "SearchScreen: Clicked on back button in Search Screen.")
 			}
