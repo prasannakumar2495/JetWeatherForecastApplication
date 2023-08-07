@@ -25,9 +25,24 @@ class FavouritesViewModel @Inject constructor(private val weatherRepo: WeatherRe
 				.collect {
 					if (it.isEmpty())
 						Log.d(TAG, "MSG: No Favourites")
-					else _favouritesList.value = it
+					else {
+						_favouritesList.value = it
+						Log.d(TAG, "All Fav: ${favouritesList.value}")
+					}
 				}
 		}
+	}
+	
+	fun getAllFavourites() = viewModelScope.launch {
+		weatherRepo.getFavourites().distinctUntilChanged()
+			.collect {
+				if (it.isEmpty())
+					Log.d(TAG, "MSG: No Favourites")
+				else {
+					_favouritesList.value = it
+					Log.d(TAG, "All Fav: ${favouritesList.value}")
+				}
+			}
 	}
 	
 	suspend fun insertFavourite(favourite: Favourite) = viewModelScope.launch {

@@ -24,6 +24,7 @@ import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.pk.jetweatherforecastapplication.model.Favourite
@@ -34,6 +35,7 @@ import com.pk.jetweatherforecastapplication.widgets.WeatherAppBar
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -51,12 +53,12 @@ fun FavouritesScreen(navController: NavController, favouritesViewModel: Favourit
 					isMainScreen = false, displayBackNavigationIcon = true,
 					onButtonClicked = { navController.popBackStack() })
 			}
-		) {
-			Surface(modifier = Modifier.padding(it)) {
+		) { paddingValues ->
+			Surface(modifier = Modifier.padding(paddingValues)) {
 				Column(verticalArrangement = Center, horizontalAlignment = CenterHorizontally) {
 					val listOfFavourites = favouritesViewModel.favouritesList.collectAsState().value
 					LazyColumn {
-						items(items = listOfFavourites) { favouriteItem ->
+						items(items = listOfFavourites, key = { it.city }) { favouriteItem ->
 							CityRow(navController, favouriteItem, favouritesViewModel)
 						}
 					}
@@ -104,7 +106,14 @@ fun CityRow(
 			}
 			IconButton(onClick = {
 				CoroutineScope(Dispatchers.Main).launch {
-					favouritesViewModel.deleteSingleFavourite(favourite = favouriteItem)
+					favouritesViewModel.apply {
+						withContext(context = Dispatchers.IO) {
+							deleteSingleFavourite(favourite = favouriteItem)
+						}
+						withContext(context = Dispatchers.IO) {
+							getAllFavourites()
+						}
+					}
 				}
 			}, content = {
 				Icon(
